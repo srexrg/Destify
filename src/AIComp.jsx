@@ -2,10 +2,6 @@ import { useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import './AIComp.css';
 
-const API_KEY= import.meta.env.VITE_API_KEY;
-
-
-
 const AIComp = () => {
   const [preferences, setPreferences] = useState("");
   const [destination, setDestination] = useState("");
@@ -16,7 +12,7 @@ const AIComp = () => {
 
   const generateDestination = async () => {
     try {
-      const genAI = new GoogleGenerativeAI(API_KEY);
+      const genAI = new GoogleGenerativeAI(import.meta.env.VITE_API_KEY);
       const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
       const prompt = `Discover your perfect travel destination tailored to your preferences: ${preferences}. Immerse yourself in breathtaking scenic landscapes, rich cultural experiences, and thrilling adventure opportunities. Additionally, share insights about the local community and their way of life.Please refrain from using bold text to highlight the responses.`;
