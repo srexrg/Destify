@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 
 const Hero = () => {
   const openGitHub = () => {
-    window.open("https://github.com/srexrg", "_blank");
+    window.open("https://github.com/srexrg/Destination-Generator", "_blank");
   };
 
   return (
@@ -17,7 +17,7 @@ const Hero = () => {
 
       <h1 className="head_text">
       AI Unveils Dream <br className="max-md:hidden" />
-        <span className="orange_gradient">Destinations</span>
+        <span className="blue_gradient">Destinations</span>
       </h1>
 
       <h2 className="desc">

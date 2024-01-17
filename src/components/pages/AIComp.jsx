@@ -3,7 +3,8 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Button } from "../ui/button";
 import { Input } from "@/components/ui/input";
 import months from "@/utils/months";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const AIComp = () => {
   const [preferences, setPreferences] = useState("");
   const [budget, setBudget] = useState("");
@@ -36,10 +37,15 @@ const AIComp = () => {
     try {
       setLoading(true);
 
+      if (!preferences || !budget || !month || !numTravelers) {
+        toast.error("Please fill all the Input Fields");
+        return;
+      }
+
       const genAI = new GoogleGenerativeAI(import.meta.env.VITE_API_KEY);
       const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
-      const prompt = `Discover your perfect travel destination tailored to your preferences: ${preferences}. Plan your trip with a budget of ${budget} in US Dollars, in the month of ${month}, and for ${numTravelers} travelers. Immerse yourself in breathtaking scenic landscapes, rich cultural experiences, and thrilling adventure opportunities. Additionally, share insights about the local community and their way of life. Please refrain from using bold text to highlight the responses.`;
+      const prompt = `Discover your ideal travel destination based on your preferences. Plan your trip with a budget of $${budget} for  ${numTravelers} travelers in US Dollars, intending to travel in the month of ${month}.Immerse yourself in breathtaking scenic landscapes, embrace rich cultural experiences, and explore thrilling adventure opportunities. Additionally, gain insights into the local community and their way of life. Please avoid using bold text to highlight the responses.`;
 
       const result = await model.generateContent(prompt);
       const response = result.response;
@@ -63,7 +69,8 @@ const AIComp = () => {
     } catch (error) {
       console.error("Error generating destination:", error);
       if (error.response) {
-        console.error("Response data:", error.response.data);
+        toast.error("Naughty ho rahe kyaa");
+        console.log(error.response.data);
       }
     } finally {
       setLoading(false);
@@ -75,7 +82,7 @@ const AIComp = () => {
       <div className="grid grid-cols-2 gap-4 mt-4">
         <div>
           <label className="block text-gray-700 py-2">
-          Preferences:
+            Preferences:
             <Input
               type="text"
               value={preferences}
@@ -100,7 +107,6 @@ const AIComp = () => {
           <select
             value={month}
             onChange={handleMonthChange}
-            // className=" px-3 py-1 mt-1"
             className="url_input px-3 py-1"
           >
             <option value="">Select Month</option>
@@ -132,14 +138,20 @@ const AIComp = () => {
       </Button>
       {destination && (
         <div className="mt-8">
-          <h2 className="text-2xl font-bold text-black-400 p-4">
+          <h2 className="mt-5 text-4xl font-extrabold p-4 leading-[1.15] text-black sm:text-3xl text-center;">
             Recommended Destination:
           </h2>
-          <div className="summary_box">
-            {destination}
-          </div>
+          <div className="summary_box">{destination}</div>
         </div>
       )}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        closeOnClick
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 };
