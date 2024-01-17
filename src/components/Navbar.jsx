@@ -21,7 +21,8 @@ const Hero = () => {
       </h1>
 
       <h2 className="desc">
-      Embark on journeys with AI: Explore personalized travel destinations effortlessly
+      Don&apos;t know where to go for this vacation? We got you covered.<br/>
+      Explore personalized travel destinations effortlessly
       </h2>
     </header>
   );
