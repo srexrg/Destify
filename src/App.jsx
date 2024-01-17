@@ -1,4 +1,4 @@
-import AIComp from "./components/pages/AIComp";
+import AIComp from "./components/AIComp";
 import "./App.css";
 import Navbar from "./components/Navbar";
 import { Analytics } from '@vercel/analytics/react';

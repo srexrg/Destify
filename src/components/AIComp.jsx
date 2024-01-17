@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { Button } from "../ui/button";
+import { Button } from "./ui/button";
 import { Input } from "@/components/ui/input";
 import months from "@/utils/months";
 import { ToastContainer, toast } from "react-toastify";
@@ -12,10 +12,6 @@ const AIComp = () => {
   const [numTravelers, setNumTravelers] = useState("");
   const [destination, setDestination] = useState("");
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    document.title = "Destination Generator";
-  }, []);
 
   const handlePreferencesChange = (e) => {
     setPreferences(e.target.value);
