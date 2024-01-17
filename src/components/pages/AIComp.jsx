@@ -78,81 +78,82 @@ const AIComp = () => {
   };
 
   return (
-    <div className="mx-auto p-20">
-      <div className="grid grid-cols-2 gap-4 mt-4">
-        <div>
-          <label className="block text-gray-700 py-2">
-            Preferences:
-            <Input
-              type="text"
-              value={preferences}
-              onChange={handlePreferencesChange}
-              className="url_input"
-            />
-          </label>
-        </div>
-        <div>
-          <label className="block text-gray-700 py-2">
-            Budget:
-            <Input
-              type="text"
-              value={budget}
-              onChange={handleBudgetChange}
-              className="url_input"
-            />
-          </label>
-        </div>
-        <div>
-          <label className="block text-gray-700 py-1">Month of Travel:</label>
-          <select
-            value={month}
-            onChange={handleMonthChange}
-            className="url_input px-3 py-1"
-          >
-            <option value="">Select Month</option>
-            {months.map((m) => (
-              <option key={m} value={m}>
-                {m}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label className="block text-gray-700 py-2">
-            Number of Travelers:
-            <Input
-              type="text"
-              value={numTravelers}
-              onChange={handleNumTravelersChange}
-              className="url_input"
-            />
-          </label>
-        </div>
-      </div>
-      <Button
-        className="cursor-pointer mt-4"
-        onClick={generateDestination}
-        disabled={loading}
-      >
-        {loading ? "Generating..." : "Generate Destination"}
-      </Button>
-      {destination && (
-        <div className="mt-8">
-          <h2 className="mt-5 text-4xl font-extrabold p-4 leading-[1.15] text-black sm:text-3xl text-center;">
-            Recommended Destination:
-          </h2>
-          <div className="summary_box">{destination}</div>
-        </div>
-      )}
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        closeOnClick
-        draggable
-        pauseOnHover
-      />
+    <div className="mx-auto p-6 lg:p-20">
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+    <div className="mb-4 sm:mb-0">
+      <label className="block text-gray-700 py-2">
+        Preferences:
+        <Input
+          type="text"
+          value={preferences}
+          onChange={handlePreferencesChange}
+          className="url_input"
+        />
+      </label>
     </div>
+    <div className="mb-4 sm:mb-0">
+      <label className="block text-gray-700 py-2">
+        Budget:
+        <Input
+          type="text"
+          value={budget}
+          onChange={handleBudgetChange}
+          className="url_input"
+        />
+      </label>
+    </div>
+    <div className="mb-4 sm:mb-0">
+      <label className="block text-gray-700 py-1">Month of Travel:</label>
+      <select
+        value={month}
+        onChange={handleMonthChange}
+        className="url_input px-3 py-1"
+      >
+        <option value="">Select Month</option>
+        {months.map((m) => (
+          <option key={m} value={m}>
+            {m}
+          </option>
+        ))}
+      </select>
+    </div>
+    <div>
+      <label className="block text-gray-700 py-2">
+        Number of Travelers:
+        <Input
+          type="text"
+          value={numTravelers}
+          onChange={handleNumTravelersChange}
+          className="url_input"
+        />
+      </label>
+    </div>
+  </div>
+  <Button
+    className="cursor-pointer mt-4"
+    onClick={generateDestination}
+    disabled={loading}
+  >
+    {loading ? "Generating..." : "Generate Destination"}
+  </Button>
+  {destination && (
+    <div className="mt-8">
+      <h2 className="mt-5 text-4xl font-extrabold p-4 leading-[1.15] text-black sm:text-3xl text-center">
+        Recommended Destination:
+      </h2>
+      <div className="summary_box">{destination}</div>
+    </div>
+  )}
+  <ToastContainer
+    position="top-right"
+    autoClose={5000}
+    hideProgressBar={false}
+    closeOnClick
+    draggable
+    pauseOnHover
+  />
+</div>
+
   );
 };
 
