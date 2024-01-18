@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import months from "@/utils/months";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+export const runtime = "edge"
 const AIComp = () => {
   const [preferences, setPreferences] = useState("");
   const [budget, setBudget] = useState("");
@@ -32,23 +33,29 @@ const AIComp = () => {
   const generateDestination = async () => {
     try {
       setLoading(true);
-
+  
       if (!preferences || !budget || !month || !numTravelers) {
         toast.error("Please fill all the Input Fields");
         return;
       }
-
+  
       const genAI = new GoogleGenerativeAI(import.meta.env.VITE_API_KEY);
       const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-
+  
       const prompt = `Discover your ideal travel destination based on your preferences. Plan your trip with a budget of $${budget} for  ${numTravelers} travelers in US Dollars, intending to travel in the month of ${month}.Immerse yourself in breathtaking scenic landscapes, embrace rich cultural experiences, and explore thrilling adventure opportunities. Additionally, gain insights into the local community and their way of life. Please avoid using bold text to highlight the responses.`;
-
-      const result = await model.generateContent(prompt);
+  
+      const result = await model.generateContent(prompt, {
+        temperature: 0.9,
+        topK: 1,
+        topP: 1,
+        maxOutputTokens: 1000,
+      });
+  
       const response = result.response;
       const text = response.text().replace(/\*\*/g, "").replace(/\*/g, "");
-
+  
       const destinationPoints = text.split(/\d+\.\s+/).filter(Boolean);
-
+  
       const formattedResponse = destinationPoints.map((point, index) => (
         <div key={index} className="destinationPoint">
           <strong>{index + 1}. </strong>
@@ -60,7 +67,7 @@ const AIComp = () => {
           ))}
         </div>
       ));
-
+  
       setDestination(formattedResponse);
     } catch (error) {
       console.error("Error generating destination:", error);
@@ -72,6 +79,7 @@ const AIComp = () => {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="mx-auto p-6 lg:p-20">
