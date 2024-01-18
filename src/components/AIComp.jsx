@@ -44,28 +44,18 @@ const AIComp = () => {
       const genAI = new GoogleGenerativeAI(import.meta.env.VITE_API_KEY);
       const model = genAI.getGenerativeModel({ model: "gemini-pro" });
   
-      const prompt = `Discover your ideal travel destination based on your preferences. Plan your trip with a budget of $${budget} for  ${numTravelers} travelers in US Dollars, intending to travel in the month of ${month}.Your main preferences are ${preferences}.Immerse yourself in breathtaking scenic landscapes, embrace rich cultural experiences, and explore thrilling adventure opportunities. Additionally, gain insights into the local community and their way of life. Please avoid using bold text to highlight the responses.`;
+      const prompt = `Discover your ideal travel destination based on your preferences. Plan your trip with a budget of $${budget} for  ${numTravelers} travelers in US Dollars, intending to travel in the month of ${month}.Your main preferences are ${preferences}.Immerse yourself in breathtaking scenic landscapes, embrace rich cultural experiences, and explore thrilling adventure opportunities.
+      Additionally, gain insights into the local community and their way of life. 
+      Please avoid using bold text to highlight the responses.
+      only use commonmark markdown for response, use #, ##, ### for headings.
+      `;
 
       const result = await model.generateContent(prompt);
   
-      const response = result.response;
-      const text = response.text().replace(/\*\*/g, "").replace(/\*/g, "");
-  
-      const destinationPoints = text.split(/\d+\.\s+/).filter(Boolean);
-  
-      const formattedResponse = destinationPoints.map((point, index) => (
-        <div key={index} className="destinationPoint">
-          <strong>{index + 1}. </strong>
-          {point.split("\n").map((line, i) => (
-            <span key={i}>
-              {line}
-              <br />
-            </span>
-          ))}
-        </div>
-      ));
-  
-      setDestination(formattedResponse);
+      const response = await result.response;
+      const text = response.text();
+
+      setDestination(text);
     } catch (error) {
       console.error("Error generating destination:", error);
       if (error.response) {
@@ -142,7 +132,9 @@ const AIComp = () => {
       <h2 className="mt-5 text-4xl font-extrabold p-4 leading-[1.15] text-black sm:text-3xl text-center">
         Recommended Destination:
       </h2>
-      <div className="summary_box">{destination}</div>
+      <div className="summary_box">{destination.split('\n').map((line, index) => (
+        <p key={index} className='font-inter font-medium text-sm text-gray-700 m-5'>{line}</p>
+      ))}</div>
     </div>
   )}
   <ToastContainer
