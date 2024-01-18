@@ -6,11 +6,13 @@ import months from "@/utils/months";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 export const runtime = "edge"
+
+
 const AIComp = () => {
-  const [preferences, setPreferences] = useState("");
-  const [budget, setBudget] = useState("");
-  const [month, setMonth] = useState("");
-  const [numTravelers, setNumTravelers] = useState("");
+  const [preferences, setPreferences] = useState("Food,Beach,Sunset");
+  const [budget, setBudget] = useState("1000");
+  const [month, setMonth] = useState("March");
+  const [numTravelers, setNumTravelers] = useState("4");
   const [destination, setDestination] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -42,14 +44,9 @@ const AIComp = () => {
       const genAI = new GoogleGenerativeAI(import.meta.env.VITE_API_KEY);
       const model = genAI.getGenerativeModel({ model: "gemini-pro" });
   
-      const prompt = `Discover your ideal travel destination based on your preferences. Plan your trip with a budget of $${budget} for  ${numTravelers} travelers in US Dollars, intending to travel in the month of ${month}.Immerse yourself in breathtaking scenic landscapes, embrace rich cultural experiences, and explore thrilling adventure opportunities. Additionally, gain insights into the local community and their way of life. Please avoid using bold text to highlight the responses.`;
-  
-      const result = await model.generateContent(prompt, {
-        temperature: 0.9,
-        topK: 1,
-        topP: 1,
-        maxOutputTokens: 1000,
-      });
+      const prompt = `Discover your ideal travel destination based on your preferences. Plan your trip with a budget of $${budget} for  ${numTravelers} travelers in US Dollars, intending to travel in the month of ${month}.Your main preferences are ${preferences}.Immerse yourself in breathtaking scenic landscapes, embrace rich cultural experiences, and explore thrilling adventure opportunities. Additionally, gain insights into the local community and their way of life. Please avoid using bold text to highlight the responses.`;
+
+      const result = await model.generateContent(prompt);
   
       const response = result.response;
       const text = response.text().replace(/\*\*/g, "").replace(/\*/g, "");
