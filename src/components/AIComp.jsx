@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import months from "@/utils/months";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import LoadingBar from "./LoadingBar";
 export const runtime = "edge";
 
 const AIComp = () => {
@@ -126,6 +127,7 @@ const AIComp = () => {
       >
         {loading ? "Generating..." : "Generate Destination"}
       </Button>
+      {loading && <LoadingBar />}
       {destination && (
         <div className="mt-8">
           <h2 className="mt-5 text-4xl font-extrabold p-4 leading-[1.15] text-black sm:text-3xl text-center">
