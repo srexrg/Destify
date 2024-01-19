@@ -1,12 +1,12 @@
 import { useState } from "react";
+import ReactMarkdown from "react-markdown";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Button } from "./ui/button";
 import { Input } from "@/components/ui/input";
 import months from "@/utils/months";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-export const runtime = "edge"
-
+export const runtime = "edge";
 
 const AIComp = () => {
   const [preferences, setPreferences] = useState("Food,Beach,Sunset");
@@ -35,15 +35,15 @@ const AIComp = () => {
   const generateDestination = async () => {
     try {
       setLoading(true);
-  
+
       if (!preferences || !budget || !month || !numTravelers) {
         toast.error("Please fill all the Input Fields");
         return;
       }
-  
+
       const genAI = new GoogleGenerativeAI(import.meta.env.VITE_API_KEY);
       const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-  
+
       const prompt = `Discover your ideal travel destination based on your preferences. Plan your trip with a budget of $${budget} for  ${numTravelers} travelers in US Dollars, intending to travel in the month of ${month}.Your main preferences are ${preferences}.Immerse yourself in breathtaking scenic landscapes, embrace rich cultural experiences, and explore thrilling adventure opportunities.
       Additionally, gain insights into the local community and their way of life. 
       Please avoid using bold text to highlight the responses.
@@ -51,7 +51,7 @@ const AIComp = () => {
       `;
 
       const result = await model.generateContent(prompt);
-  
+
       const response = await result.response;
       const text = response.text();
 
@@ -66,87 +66,86 @@ const AIComp = () => {
       setLoading(false);
     }
   };
-  
 
   return (
     <div className="mx-auto p-6 lg:p-20">
-  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-    <div className="mb-4 sm:mb-0">
-      <label className="block text-gray-700 py-2">
-        Preferences:
-        <Input
-          type="text"
-          value={preferences}
-          onChange={handlePreferencesChange}
-          className="url_input"
-        />
-      </label>
-    </div>
-    <div className="mb-4 sm:mb-0">
-      <label className="block text-gray-700 py-2">
-        Budget:
-        <Input
-          type="text"
-          value={budget}
-          onChange={handleBudgetChange}
-          className="url_input"
-        />
-      </label>
-    </div>
-    <div className="mb-4 sm:mb-0">
-      <label className="block text-gray-700 py-1">Month of Travel:</label>
-      <select
-        value={month}
-        onChange={handleMonthChange}
-        className="url_input px-3 py-1"
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+        <div className="mb-4 sm:mb-0">
+          <label className="block text-gray-700 py-2">
+            Preferences:
+            <Input
+              type="text"
+              value={preferences}
+              onChange={handlePreferencesChange}
+              className="url_input"
+            />
+          </label>
+        </div>
+        <div className="mb-4 sm:mb-0">
+          <label className="block text-gray-700 py-2">
+            Budget:
+            <Input
+              type="text"
+              value={budget}
+              onChange={handleBudgetChange}
+              className="url_input"
+            />
+          </label>
+        </div>
+        <div className="mb-4 sm:mb-0">
+          <label className="block text-gray-700 py-1">Month of Travel:</label>
+          <select
+            value={month}
+            onChange={handleMonthChange}
+            className="url_input px-3 py-1"
+          >
+            <option value="">Select Month</option>
+            {months.map((m) => (
+              <option key={m} value={m}>
+                {m}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="block text-gray-700 py-2">
+            Number of Travelers:
+            <Input
+              type="text"
+              value={numTravelers}
+              onChange={handleNumTravelersChange}
+              className="url_input"
+            />
+          </label>
+        </div>
+      </div>
+      <Button
+        className="cursor-pointer mt-4"
+        onClick={generateDestination}
+        disabled={loading}
       >
-        <option value="">Select Month</option>
-        {months.map((m) => (
-          <option key={m} value={m}>
-            {m}
-          </option>
-        ))}
-      </select>
-    </div>
-    <div>
-      <label className="block text-gray-700 py-2">
-        Number of Travelers:
-        <Input
-          type="text"
-          value={numTravelers}
-          onChange={handleNumTravelersChange}
-          className="url_input"
-        />
-      </label>
-    </div>
-  </div>
-  <Button
-    className="cursor-pointer mt-4"
-    onClick={generateDestination}
-    disabled={loading}
-  >
-    {loading ? "Generating..." : "Generate Destination"}
-  </Button>
-  {destination && (
-    <div className="mt-8">
-      <h2 className="mt-5 text-4xl font-extrabold p-4 leading-[1.15] text-black sm:text-3xl text-center">
-        Recommended Destination:
-      </h2>
-      <div className="summary_box">{destination.split('\n').map((line, index) => (
-        <p key={index} className='font-inter font-medium text-sm text-gray-700 m-5'>{line}</p>
-      ))}</div>
-    </div>
-  )}
-  <ToastContainer
-    position="top-right"
-    autoClose={5000}
-    hideProgressBar={false}
-    closeOnClick
-    draggable
-    pauseOnHover
-  />
-</div>
+        {loading ? "Generating..." : "Generate Destination"}
+      </Button>
+      {destination && (
+        <div className="mt-8">
+          <h2 className="mt-5 text-4xl font-extrabold p-4 leading-[1.15] text-black sm:text-3xl text-center">
+            Recommended Destination:
+          </h2>
+          <div className="summary_box prose lg:prose-lg xl:prose-xl 2xl:prose-xl text-gray-700">
+            <ReactMarkdown>{destination}</ReactMarkdown>
+          </div>
+        </div>
+      )}
 
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        closeOnClick
+        draggable
+        pauseOnHover
+      />
+    </div>
   );
 };
 
