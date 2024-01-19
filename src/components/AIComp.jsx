@@ -129,7 +129,7 @@ const AIComp = () => {
       {destination && (
         <div className="mt-8">
           <h2 className="mt-5 text-4xl font-extrabold p-4 leading-[1.15] text-black sm:text-3xl text-center">
-            Recommended Destination:
+            Recommended Destinations:
           </h2>
           <div className="summary_box prose sm:prose-sm lg:prose-lg xl:prose-xl 2xl:prose-2xl max-w-[1000px] text-left text-gray-700">
             <ReactMarkdown>{destination}</ReactMarkdown>
