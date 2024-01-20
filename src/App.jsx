@@ -6,7 +6,7 @@ import { Analytics } from '@vercel/analytics/react';
 function App() {
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+      <Navbar/>
         <AIComp />
         <Analytics/>
     </div>
