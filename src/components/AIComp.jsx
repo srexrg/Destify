@@ -1,6 +1,6 @@
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+// import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Button } from "./ui/button";
 import { Input } from "@/components/ui/input";
 import months from "@/utils/months";
@@ -42,33 +42,40 @@ const AIComp = () => {
         return;
       }
 
-      const genAI = new GoogleGenerativeAI(import.meta.env.VITE_API_KEY);
-      const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+      const response = await fetch(
+        "https://destify-backend.onrender.com/generate",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            preferences,
+            budget,
+            numTravelers,
+            month,
+            user_id: "1571",
+          }),
+        }
+      );
 
-      const prompt = `Discover your ideal travel destination based on your preferences. Plan your trip with a budget of $${budget} for  ${numTravelers} travelers in US Dollars, intending to travel in the month of ${month}.Your main preferences are ${preferences}.Immerse yourself in breathtaking scenic landscapes, embrace rich cultural experiences, and explore thrilling adventure opportunities.
-      Additionally, gain insights into the local community and their way of life. 
-      Please avoid using bold text to highlight the responses.
-      only use commonmark markdown for response, use #, ##, ### for headings.
-      `;
-
-      const result = await model.generateContent(prompt);
-
-      const response = await result.response;
-      const text = response.text();
-
-      setDestination(text);
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        setDestination(data.data);
+      } else {
+        toast.error("Error generating destination");
+      }
     } catch (error) {
       console.error("Error generating destination:", error);
-      if (error.response) {
-        toast.error("Naughty ho rahe kyaa");
-        console.log(error.response.data);
-      }
+      toast.error("Error generating destination");
     } finally {
       setLoading(false);
     }
   };
 
   return (
+    <>
     <div className="mx-auto p-6 lg:p-20">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
         <div className="mb-4 sm:mb-0">
@@ -148,6 +155,7 @@ const AIComp = () => {
         pauseOnHover
       />
     </div>
+    </>
   );
 };
 
