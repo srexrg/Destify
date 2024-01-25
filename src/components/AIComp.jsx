@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
-// import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Button } from "./ui/button";
 import { Input } from "@/components/ui/input";
 import months from "@/utils/months";
@@ -54,11 +53,10 @@ const AIComp = () => {
             budget,
             numTravelers,
             month,
-            user_id: "1571",
+            user_id: Math.random(),
           }),
         }
       );
-
       if (response.ok) {
         const data = await response.json();
         console.log(data);
