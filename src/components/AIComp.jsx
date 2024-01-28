@@ -53,7 +53,6 @@ const AIComp = () => {
             budget,
             numTravelers,
             month,
-            user_id: Math.random(),
           }),
         }
       );
