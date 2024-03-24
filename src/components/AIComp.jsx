@@ -42,7 +42,7 @@ const AIComp = () => {
       }
 
       const response = await fetch(
-        "https://destify-backend.onrender.com/generate",
+        "https://destify-backend.vercel.app/generate",
         {
           method: "POST",
           headers: {
