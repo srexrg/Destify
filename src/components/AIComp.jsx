@@ -8,11 +8,14 @@ import "react-toastify/dist/ReactToastify.css";
 import LoadingBar from "./LoadingBar";
 export const runtime = "edge";
 
+const currencies = ["USD", "EUR", "GBP", "JPY", "AUD"]; // Add more currencies as needed
+
 const AIComp = () => {
   const [preferences, setPreferences] = useState("Food,Beach,Sunset");
   const [budget, setBudget] = useState("");
   const [month, setMonth] = useState("");
   const [numTravelers, setNumTravelers] = useState("");
+  const [currency, setCurrency] = useState("USD"); // Added state for currency
   const [destination, setDestination] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -30,6 +33,10 @@ const AIComp = () => {
 
   const handleNumTravelersChange = (e) => {
     setNumTravelers(e.target.value);
+  };
+
+  const handleCurrencyChange = (e) => {
+    setCurrency(e.target.value); // Added handler for currency change
   };
 
   const generateDestination = async () => {
@@ -53,6 +60,7 @@ const AIComp = () => {
             budget,
             numTravelers,
             month,
+            currency, // Include currency in the request body
           }),
         }
       );
@@ -89,12 +97,25 @@ const AIComp = () => {
           <div className="mb-4 sm:mb-0">
             <label className="block text-gray-700 py-2">
               Budget:
-              <Input
-                type="text"
-                value={budget}
-                onChange={handleBudgetChange}
-                className="url_input"
-              />
+              <div className="flex">
+                <Input
+                  type="text"
+                  value={budget}
+                  onChange={handleBudgetChange}
+                  className="url_input flex-grow mr-2"
+                />
+                <select
+                  value={currency} // Added currency selection dropdown
+                  onChange={handleCurrencyChange}
+                  className="url_input px-3 py-1"
+                >
+                  {currencies.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </label>
           </div>
           <div className="mb-4 sm:mb-0">
