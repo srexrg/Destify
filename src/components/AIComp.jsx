@@ -6,9 +6,10 @@ import months from "@/utils/months";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LoadingBar from "./LoadingBar";
+
 export const runtime = "edge";
 
-const currencies = ["USD", "EUR", "GBP", "JPY", "AUD","INR"]; // Add more currencies as needed
+const currencies = ["USD", "EUR", "GBP", "JPY", "AUD", "INR"]; // Add more currencies as needed
 
 const AIComp = () => {
   const [preferences, setPreferences] = useState("Food,Beach,Sunset");
@@ -43,8 +44,9 @@ const AIComp = () => {
     try {
       setLoading(true);
 
-      if (!preferences || !budget || !month || !numTravelers) {
+      if (!preferences || !budget || !month || !numTravelers || !currency) {
         toast.error("Please fill all the Input Fields");
+        setLoading(false);
         return;
       }
 
@@ -60,7 +62,7 @@ const AIComp = () => {
             budget,
             numTravelers,
             month,
-            currency, // Include currency in the request body
+            currency,
           }),
         }
       );
