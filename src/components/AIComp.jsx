@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import { Input } from "@/components/ui/input";
 import months from "@/utils/months";
 import { ToastContainer, toast } from "react-toastify";
+import { usePDF } from "react-to-pdf";
 import "react-toastify/dist/ReactToastify.css";
 import LoadingBar from "./LoadingBar";
 
@@ -19,6 +20,19 @@ const AIComp = () => {
   const [currency, setCurrency] = useState("USD"); // Added state for currency
   const [destination, setDestination] = useState("");
   const [loading, setLoading] = useState(false);
+  // const pdfRef=useRef(null)
+
+  const { toPDF, targetRef } = usePDF({
+    filename: "travel-recommendations.pdf"
+  });
+
+  const handleExportPDF = async () => {
+    try {
+      await toPDF();
+    } catch (error) {
+      toast.error("Error generating PDF");
+    }
+  };
 
   const handlePreferencesChange = (e) => {
     setPreferences(e.target.value);
@@ -156,14 +170,24 @@ const AIComp = () => {
         </Button>
         {loading && <LoadingBar />}
         {destination && (
-          <div className="mt-8">
-            <h2 className="mt-5 text-4xl font-extrabold p-4 leading-[1.15] text-black sm:text-3xl text-center">
-              Recommended Destinations:
-            </h2>
-            <div className="summary_box prose sm:prose-sm lg:prose-lg xl:prose-xl 2xl:prose-2xl max-w-[1000px] text-left text-gray-700">
-              <ReactMarkdown>{destination}</ReactMarkdown>
+          <>
+            <div className="mt-8" ref={targetRef}>
+              <h2 className="mt-5 text-4xl font-extrabold p-4 leading-[1.15] text-black sm:text-3xl text-center">
+                Recommended Destinations:
+              </h2>
+              <div className="summary_box prose sm:prose-sm lg:prose-lg xl:prose-xl 2xl:prose-2xl max-w-[1000px] text-left text-gray-700">
+                <ReactMarkdown>{destination}</ReactMarkdown>
+              </div>
             </div>
-          </div>
+            <div className="flex justify-center mt-4">
+              <Button
+                onClick={handleExportPDF}
+                className="cursor-pointer mt-4"
+              >
+                Export as PDF
+              </Button>
+            </div>
+          </>
         )}
 
         <ToastContainer
